@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="00.normal.css" />
+    <title>Hello React</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="react/react.js"></script>
+    <script src="react/react-dom.js"></script>
+    <script src="react/babel.js"></script>
+    <script type="text/babel">
+      //my app's code
+      //Function Component
+      // const MyComponent = function() {
+      //   return <span>I am so custom</span>
+      //     // return React.createElement('span', null, 'I am so custon');
+      // };
+      // const MyComponent = function({name, job}) {
+      //   return <span>My name is <em>{name}</em>, the {job}</span>;
+      // }
+
+      // MyComponent.defaultProps = {
+      //   job: 'engineer',
+      // };
+
+      //Class Component
+      // class MyComponent extends React.Component {
+      //   render() {
+      //     return React.createElement('span', null, 'I am so custom');
+      //     //or with JSX:
+      //     //return <span>I am so custom</span>
+      //   }
+      // }
+
+      // class MyComponent extends React.Component {
+      //   render() {
+      //     return (
+      //       <span>
+      //         My name is <em>{this.props.name}</em>,
+      //         the {this.props.job}
+      //       </span>
+      //     );
+      //   }
+      // }
+
+      // MyComponent.defaultProps = {
+      //   job: "engineer",
+      // };
+
+      // ReactDOM.render(
+      //   <MyComponent name="Bob" />,
+      //   document.getElementById("app")
+      // );
+
+      class TextAreaCounter extends React.Component {
+        constructor() {
+          super();
+          this.state = {};
+        }
+
+        onTextChange(event) {
+          this.setState({
+            text: event.target.value,
+          });
+        }
+
+        componentDidMount() {
+          console.log('componentDidMount');
+        }
+        componentWillUnmount() {
+          console.log('componentWillUnmount');
+        }
+        componentDidUpdate(prevProps, prevState, snapshot) {
+          console.log(
+            'componentDidUpdate     ',
+            prevProps,
+            prevState,
+            snapshot,
+          );
+        }
+        getSnapshotBeforeUpdate(prevProps, prevState) {
+          console.log('getSnapshotBeforeUpdate', prevProps, prevState);
+          return 'hello';
+        }
+        shouldComponentUpdate(newProps, newState) {
+          console.log('shouldComponentUpdate  ', newProps, newState);
+          return true;
+        }
+
+        render() {
+          const text = "text" in this.state ? this.state.text : this.props.text;
+          return (
+            <div>
+              <textarea
+                value={text}
+                onChange={(event) => this.onTextChange(event)}
+              />
+              <h3>{text.length}</h3>
+            </div>
+          );
+        }
+      }
+
+      TextAreaCounter.defaultProps = {
+        text: `Count me as I type`,
+      };
+
+      const myTextAreaCounter = ReactDOM.render(
+        <TextAreaCounter text="Bob" />,
+        document.getElementById("app")
+      );
+    </script>
+  </body>
+</html>
