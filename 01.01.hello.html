@@ -56,63 +56,139 @@
       //   document.getElementById("app")
       // );
 
-      class TextAreaCounter extends React.Component {
-        constructor() {
-          super();
-          this.state = {};
+      // class TextAreaCounter extends React.Component {
+      //   constructor() {
+      //     super();
+      //     this.state = {};
+      //   }
+
+      //   onTextChange(event) {
+      //     this.setState({
+      //       text: event.target.value,
+      //     });
+      //   }
+
+      //   componentDidMount() {
+      //     console.log('componentDidMount');
+      //   }
+      //   componentWillUnmount() {
+      //     console.log('componentWillUnmount');
+      //   }
+      //   componentDidUpdate(prevProps, prevState, snapshot) {
+      //     console.log(
+      //       'componentDidUpdate     ',
+      //       prevProps,
+      //       prevState,
+      //       snapshot,
+      //     );
+      //   }
+      //   getSnapshotBeforeUpdate(prevProps, prevState) {
+      //     console.log('getSnapshotBeforeUpdate', prevProps, prevState);
+      //     return 'hello';
+      //   }
+      //   shouldComponentUpdate(newProps, newState) {
+      //     console.log('shouldComponentUpdate  ', newProps, newState);
+      //     return true;
+      //   }
+
+      //   render() {
+      //     const text = "text" in this.state ? this.state.text : this.props.text;
+      //     return (
+      //       <div>
+      //         <textarea
+      //           value={text}
+      //           onChange={(event) => this.onTextChange(event)}
+      //         />
+      //         <h3>{text.length}</h3>
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // TextAreaCounter.defaultProps = {
+      //   text: `Count me as I type`,
+      // };
+
+      // const myTextAreaCounter = ReactDOM.render(
+      //   <TextAreaCounter text="Bob" />,
+      //   document.getElementById("app")
+      // );
+      // const useState = React.useState;
+      // const useEffect = React.useEffect;
+      // const useLayoutEffect = React.useLayoutEffect;
+      // function Example() {
+      //   useEffect(() => {
+      //     console.log("Rendering <Example/>", Date.now());
+      //     return () => {
+      //       console.log("Removing <Example/>", Date.now());
+      //     };
+      //   }, []);
+      //   return <p>I am an example child component.</p>;
+      // }
+
+      // function ExampleParent() {
+      //   const [visible, setVisible] = useState(false);
+      //   return (
+      //     <div>
+      //       <button onClick={() => setVisible(!visible)}>
+      //         Hello there, press me {visible ? "again" : ""}
+      //       </button>
+      //       {visible ? <Example /> : null}
+      //     </div>
+      //   );
+      // }
+      const { useState, useEffect, useLayoutEffect } = React;
+
+      function Example({ layout }) {
+        if (layout === null) {
+          return null;
         }
 
-        onTextChange(event) {
-          this.setState({
-            text: event.target.value,
-          });
+        if (layout) {
+          useLayoutEffect(() => {
+            const table = document.getElementsByTagName("table")[0];
+            console.log(table.offsetWidth);
+            table.width = "250px";
+          }, []);
+        } else {
+          useEffect(() => {
+            const table = document.getElementsByTagName("table")[0];
+            console.log(table.offsetWidth);
+            table.width = "250px";
+          }, []);
         }
 
-        componentDidMount() {
-          console.log('componentDidMount');
-        }
-        componentWillUnmount() {
-          console.log('componentWillUnmount');
-        }
-        componentDidUpdate(prevProps, prevState, snapshot) {
-          console.log(
-            'componentDidUpdate     ',
-            prevProps,
-            prevState,
-            snapshot,
-          );
-        }
-        getSnapshotBeforeUpdate(prevProps, prevState) {
-          console.log('getSnapshotBeforeUpdate', prevProps, prevState);
-          return 'hello';
-        }
-        shouldComponentUpdate(newProps, newState) {
-          console.log('shouldComponentUpdate  ', newProps, newState);
-          return true;
-        }
-
-        render() {
-          const text = "text" in this.state ? this.state.text : this.props.text;
-          return (
-            <div>
-              <textarea
-                value={text}
-                onChange={(event) => this.onTextChange(event)}
-              />
-              <h3>{text.length}</h3>
-            </div>
-          );
-        }
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Random</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from(Array(10000)).map((_, idx) => (
+                <tr key={idx}>
+                  <td width={Math.random() * 800}>{Math.random()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
       }
 
-      TextAreaCounter.defaultProps = {
-        text: `Count me as I type`,
-      };
+      function ExampleParent() {
+        const [layout, setLayout] = useState(null);
+        return (
+          <div>
+            <button onClick={() => setLayout(false)}>useEffect</button>{" "}
+            <button onClick={() => setLayout(true)}>useLayoutEffect</button>{" "}
+            <button onClick={() => setLayout(null)}>clear</button>
+            <Example layout={layout} />
+          </div>
+        );
+      }
 
-      const myTextAreaCounter = ReactDOM.render(
-        <TextAreaCounter text="Bob" />,
-        document.getElementById("app")
-      );
+      ReactDOM.render(<ExampleParent />, document.getElementById("app"));
     </script>
   </body>
 </html>
